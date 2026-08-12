@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="id">
+ <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260812-05-370e8b7","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/7949ff62d67710d5.telemetry_sdk.js" integrity="sha512-KIvXA82Di44YY/RH9/63A9MuTuavYgDFG8PfErJn7Wli4K0LAOk+coo/aPXk3+ZNL96nHh9VYD4PE+fLes+laQ=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrange the Sentence</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;family=Fraunces:opsz,wght@9..144,700;9..144,800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #33516c;
+      --blue: #62b8e7;
+      --yellow: #ffd96b;
+      --pink: #ff9fb7;
+      --mint: #8cdbbc;
+      --paper: #fffdf6;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "DM Sans", sans-serif; color: var(--ink); }
+    .app-shell { width: 100%; min-height: calc(100 * min(var(--vh, 1vh), 1vh)); overflow: hidden; }
+    .school-board {
+      background-color: #dff3fc;
+      background-image: radial-gradient(#ffffff99 1.3px, transparent 1.3px);
+      background-size: 20px 20px;
+    }
+    .game-card {
+      background: rgba(255, 253, 246, .94);
+      border: 4px solid #ffffff;
+      box-shadow: 0 12px 0 #b9dfed, 0 18px 30px rgba(74, 139, 167, .16);
+    }
+    .word-bank {
+      position: relative;
+      height: 265px;
+      overflow: hidden;
+      border: 3px dashed #70bddd;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #e9f8ff, #f9feff);
+    }
+    .word-card {
+      position: absolute;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 68px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 rgba(74, 115, 137, .22), 0 8px 12px rgba(67, 123, 149, .13);
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      white-space: nowrap;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .word-card:hover { box-shadow: 0 5px 0 rgba(74, 115, 137, .22), 0 11px 16px rgba(67, 123, 149, .18); }
+    .word-card.dragging { cursor: grabbing; z-index: 20; transform: scale(1.07); opacity: .92; }
+    .word-card.placed {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      animation: none !important;
+      cursor: grab;
+    }
+    .answer-zone {
+      min-height: 118px;
+      border: 3px dashed #ffab69;
+      border-radius: 21px;
+      background: #fff7eb;
+      transition: background .2s, border-color .2s;
+    }
+    .answer-zone.drag-over { background: #fff0d8; border-color: #f78055; }
+    .answer-zone.correct { border-color: #64bf91; background: #edfff5; }
+    .answer-zone.incorrect { border-color: #f48686; background: #fff0f0; }
+    .feedback { min-height: 28px; }
+    .control-button {
+      transition: transform .16s ease, box-shadow .16s ease;
+      box-shadow: 0 4px 0 rgba(46, 82, 105, .22);
+    }
+    .control-button:hover { transform: translateY(-2px); }
+    .control-button:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(46, 82, 105, .2); }
+    .question-panel { display: none; }
+    .question-panel.active { display: block; animation: appear .35s ease both; }
+    .word-card:focus-visible, .control-button:focus-visible {
+      outline: 4px solid #294d69;
+      outline-offset: 3px;
+    }
+    @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 640px) {
+      .word-bank { height: 295px; }
+      .word-card { padding: 9px 13px; font-size: .92rem; }
+    }
+  </style>
+  <script src="/_sdk/0e8d3a91e1c6f495.data_sdk.js" type="text/javascript" integrity="sha512-c00oDoGjsMgluCLLEyVl3suwEkgjOGGplVFbsilUoBg4aMKNmsL3mwsc9r0dPn95qiSZyjBousQXgROkAW7p/w=="></script>
+  <script src="/_sdk/eba18683f23e5798.resizing_sdk.js" type="text/javascript" integrity="sha512-E0UWUllhwPXaNJtjyTKXWKrIE+FruPfFpO4mRmMDP2LI+U9bOizy5npCq6xx/JyWcvSK7D3TFf2wFR2Mha9kbA=="></script>
+ </head>
+ <body data-template-id="__page-root">
+  <div class="app-shell school-board">
+   <header class="w-full px-4 pt-6 sm:px-8 sm:pt-8">
+    <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
+     <div class="flex items-center gap-3">
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-200 text-amber-700 shadow-sm" aria-hidden="true"><i data-lucide="pencil-line" class="h-7 w-7"></i>
+      </div>
+      <div>
+       <h1 data-template-id="game-title" class="canva-text font-bold"></h1>
+       <p data-template-id="game-instruction" class="canva-text text-sm font-medium"></p>
+      </div>
+     </div>
+     <aside data-template-id="score-panel" class="canva-panel flex items-center gap-3 rounded-2xl px-5 py-3 shadow-sm" aria-label="Skor permainan"><span class="text-2xl" aria-hidden="true">⭐</span>
+      <div>
+       <p data-template-id="score-label" class="canva-text text-xs font-bold uppercase tracking-wider"></p>
+       <p id="score-value" class="text-xl font-extrabold text-sky-800" aria-live="polite">0 / 10</p>
+      </div>
+     </aside>
+    </div>
+   </header>
+   <main class="w-full px-4 pb-10 pt-6 sm:px-8">
+    <section class="game-card mx-auto max-w-5xl rounded-[30px] p-4 sm:p-7" aria-labelledby="game-title">
+     <div class="mb-5 flex items-center justify-between gap-3">
+      <div>
+       <p id="question-number" class="text-sm font-extrabold uppercase tracking-[.15em] text-sky-600">QUESTION 1 OF 10</p>
+       <h2 data-template-id="word-bank-heading" class="canva-text mt-1 font-bold"></h2>
+      </div>
+      <div class="rounded-full bg-pink-100 px-4 py-2 text-xl" aria-hidden="true">
+       🧩
+      </div>
+     </div>
+     <section id="q1" class="question-panel active" data-answer="i|eat|rice">
+      <div data-template-id="q1-bank" class="canva-panel word-bank" aria-label="Word Bank question 1"><button data-template-id="q1-w1" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="rice" type="button"></button> <button data-template-id="q1-w2" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="i" type="button"></button> <button data-template-id="q1-w3" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="eat" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q2" class="question-panel" data-answer="she|reads|a|book">
+      <div data-template-id="q2-bank" class="canva-panel word-bank" aria-label="Word Bank question 2"><button data-template-id="q2-w1" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="book" type="button"></button> <button data-template-id="q2-w2" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="she" type="button"></button> <button data-template-id="q2-w3" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="reads" type="button"></button> <button data-template-id="q2-w4" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="a" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q3" class="question-panel" data-answer="we|play|football">
+      <div data-template-id="q3-bank" class="canva-panel word-bank" aria-label="Word Bank question 3"><button data-template-id="q3-w1" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="play" type="button"></button> <button data-template-id="q3-w2" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="football" type="button"></button> <button data-template-id="q3-w3" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="we" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q4" class="question-panel" data-answer="the|cat|drinks|milk">
+      <div data-template-id="q4-bank" class="canva-panel word-bank" aria-label="Word Bank question 4"><button data-template-id="q4-w1" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="drinks" type="button"></button> <button data-template-id="q4-w2" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="the" type="button"></button> <button data-template-id="q4-w3" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="milk" type="button"></button> <button data-template-id="q4-w4" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="cat" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q5" class="question-panel" data-answer="they|go|to|school">
+      <div data-template-id="q5-bank" class="canva-panel word-bank" aria-label="Word Bank question 5"><button data-template-id="q5-w1" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="school" type="button"></button> <button data-template-id="q5-w2" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="to" type="button"></button> <button data-template-id="q5-w3" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="they" type="button"></button> <button data-template-id="q5-w4" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="go" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q6" class="question-panel" data-answer="he|likes|apples">
+      <div data-template-id="q6-bank" class="canva-panel word-bank" aria-label="Word Bank question 6"><button data-template-id="q6-w1" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="apples" type="button"></button> <button data-template-id="q6-w2" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="likes" type="button"></button> <button data-template-id="q6-w3" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="he" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q7" class="question-panel" data-answer="birds|fly|in|the|sky">
+      <div data-template-id="q7-bank" class="canva-panel word-bank" aria-label="Word Bank question 7"><button data-template-id="q7-w1" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="the" type="button"></button> <button data-template-id="q7-w2" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="fly" type="button"></button> <button data-template-id="q7-w3" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="birds" type="button"></button> <button data-template-id="q7-w4" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="sky" type="button"></button> <button data-template-id="q7-w5" class="canva-button word-card bg-orange-200 font-bold text-slate-700" data-word="in" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q8" class="question-panel" data-answer="my|mother|cooks|dinner">
+      <div data-template-id="q8-bank" class="canva-panel word-bank" aria-label="Word Bank question 8"><button data-template-id="q8-w1" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="mother" type="button"></button> <button data-template-id="q8-w2" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="dinner" type="button"></button> <button data-template-id="q8-w3" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="my" type="button"></button> <button data-template-id="q8-w4" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="cooks" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q9" class="question-panel" data-answer="you|wash|your|hands">
+      <div data-template-id="q9-bank" class="canva-panel word-bank" aria-label="Word Bank question 9"><button data-template-id="q9-w1" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="hands" type="button"></button> <button data-template-id="q9-w2" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="you" type="button"></button> <button data-template-id="q9-w3" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="your" type="button"></button> <button data-template-id="q9-w4" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="wash" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <section id="q10" class="question-panel" data-answer="the|sun|rises|early">
+      <div data-template-id="q10-bank" class="canva-panel word-bank" aria-label="Word Bank question 10"><button data-template-id="q10-w1" class="canva-button word-card bg-mint-200 font-bold text-slate-700" data-word="sun" type="button"></button> <button data-template-id="q10-w2" class="canva-button word-card bg-pink-200 font-bold text-slate-700" data-word="early" type="button"></button> <button data-template-id="q10-w3" class="canva-button word-card bg-yellow-200 font-bold text-slate-700" data-word="the" type="button"></button> <button data-template-id="q10-w4" class="canva-button word-card bg-violet-200 font-bold text-slate-700" data-word="rises" type="button"></button>
+      </div>
+      <div class="mt-6">
+       <h3 data-template-id="answer-heading" class="canva-text mb-3 font-bold"></h3>
+       <div class="answer-zone flex flex-wrap content-center gap-3 p-5" aria-label="Area jawaban"></div>
+      </div>
+     </section>
+     <p id="feedback" class="feedback mt-5 text-center text-base font-bold" role="status" aria-live="polite"></p>
+     <nav class="mt-3 flex flex-col justify-center gap-3 sm:flex-row" aria-label="Kontrol permainan"><button id="check-button" data-template-id="check-button" class="canva-button control-button rounded-xl px-6 py-3 font-bold" type="button"><i data-lucide="check-circle" class="mr-2 inline h-5 w-5"></i></button> <button id="reset-button" data-template-id="reset-button" class="canva-button control-button rounded-xl px-6 py-3 font-bold" type="button"><i data-lucide="rotate-ccw" class="mr-2 inline h-5 w-5"></i></button> <button id="next-button" data-template-id="next-button" class="canva-button control-button rounded-xl px-6 py-3 font-bold" type="button"><i data-lucide="arrow-right" class="mr-2 inline h-5 w-5"></i></button>
+     </nav>
+    </section>
+   </main>
+   <footer class="w-full px-4 pb-6 text-center">
+    <p data-template-id="footer-note" class="canva-text text-sm font-medium"></p>
+   </footer>
+  </div>
+  <script src="/_sdk/6e31def43ecdfeab.editing_sdk.js" integrity="sha512-dLsCmEXoPwwgpykZ4cBcMyQIrP+91IJR9KNOwXo5DW+WeKKF+Uo/SerDyq8ysa/BlG5uxbgAtmcz7kiob0VKYA=="></script>
+  <script>
+    let currentQuestion = 0;
+    let score = 0;
+    const scoredQuestions = new Set();
+    const motion = new Map();
+    let dragCard = null;
+    let pointerOffset = { x: 0, y: 0 };
+
+    const panels = Array.from(document.querySelectorAll('.question-panel'));
+    const feedback = document.getElementById('feedback');
+
+    function activePanel() {
+      return panels[currentQuestion];
+    }
+
+    function updateScore() {
+      document.getElementById('score-value').textContent = score + ' / 10';
+    }
+
+    function updateQuestionNumber() {
+      document.getElementById('question-number').textContent = 'QUESTION ' + (currentQuestion + 1) + ' OF 10';
+    }
+
+    function randomizeCard(card, bank) {
+      const maxX = Math.max(8, bank.clientWidth - card.offsetWidth - 8);
+      const maxY = Math.max(8, bank.clientHeight - card.offsetHeight - 8);
+      const velocity = 0.45 + Math.random() * 0.8;
+      const angle = Math.random() * Math.PI * 2;
+      card.style.left = (8 + Math.random() * Math.max(1, maxX - 8)) + 'px';
+      card.style.top = (8 + Math.random() * Math.max(1, maxY - 8)) + 'px';
+      motion.set(card, { x: parseFloat(card.style.left), y: parseFloat(card.style.top), vx: Math.cos(angle) * velocity, vy: Math.sin(angle) * velocity });
+    }
+
+    function preparePanel(panel) {
+      const bank = panel.querySelector('.word-bank');
+      panel.querySelectorAll('.word-card').forEach(card => {
+        card.classList.remove('placed');
+        bank.appendChild(card);
+        randomizeCard(card, bank);
+      });
+      panel.querySelector('.answer-zone').classList.remove('correct', 'incorrect');
+    }
+
+    function animateWords() {
+      panels.forEach(panel => {
+        if (!panel.classList.contains('active')) return;
+        const bank = panel.querySelector('.word-bank');
+        panel.querySelectorAll('.word-card:not(.placed):not(.dragging)').forEach(card => {
+          const state = motion.get(card);
+          if (!state) return;
+          const maxX = bank.clientWidth - card.offsetWidth;
+          const maxY = bank.clientHeight - card.offsetHeight;
+          state.x += state.vx;
+          state.y += state.vy;
+          if (state.x <= 0 || state.x >= maxX) {
+            state.vx *= -1;
+            state.x = Math.max(0, Math.min(maxX, state.x));
+          }
+          if (state.y <= 0 || state.y >= maxY) {
+            state.vy *= -1;
+            state.y = Math.max(0, Math.min(maxY, state.y));
+          }
+          card.style.left = state.x + 'px';
+          card.style.top = state.y + 'px';
+        });
+      });
+      requestAnimationFrame(animateWords);
+    }
+
+    function placeCard(card, zone) {
+      card.classList.remove('dragging');
+      card.classList.add('placed');
+      zone.appendChild(card);
+      zone.classList.remove('correct', 'incorrect');
+      feedback.textContent = '';
+    }
+
+    function returnCard(card) {
+      const panel = activePanel();
+      const bank = panel.querySelector('.word-bank');
+      card.classList.remove('placed', 'dragging');
+      bank.appendChild(card);
+      randomizeCard(card, bank);
+      panel.querySelector('.answer-zone').classList.remove('correct', 'incorrect');
+      feedback.textContent = '';
+    }
+
+    function cardPointerDown(event) {
+      const card = event.currentTarget;
+      if (card.classList.contains('placed')) {
+        returnCard(card);
+        return;
+      }
+      dragCard = card;
+      const rect = card.getBoundingClientRect();
+      pointerOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      card.classList.add('dragging');
+      card.setPointerCapture(event.pointerId);
+    }
+
+    function cardPointerMove(event) {
+      if (!dragCard || event.currentTarget !== dragCard) return;
+      const bank = activePanel().querySelector('.word-bank');
+      const bankRect = bank.getBoundingClientRect();
+      const state = motion.get(dragCard);
+      if (!state) return;
+      state.x = Math.max(0, Math.min(bank.clientWidth - dragCard.offsetWidth, event.clientX - bankRect.left - pointerOffset.x));
+      state.y = Math.max(0, Math.min(bank.clientHeight - dragCard.offsetHeight, event.clientY - bankRect.top - pointerOffset.y));
+      dragCard.style.left = state.x + 'px';
+      dragCard.style.top = state.y + 'px';
+    }
+
+    function cardPointerUp(event) {
+      if (!dragCard || event.currentTarget !== dragCard) return;
+      const zone = activePanel().querySelector('.answer-zone');
+      const zoneRect = zone.getBoundingClientRect();
+      const inside = event.clientX >= zoneRect.left && event.clientX <= zoneRect.right && event.clientY >= zoneRect.top && event.clientY <= zoneRect.bottom;
+      if (inside) placeCard(dragCard, zone);
+      else dragCard.classList.remove('dragging');
+      dragCard = null;
+    }
+
+    function checkAnswer() {
+      const panel = activePanel();
+      const chosen = Array.from(panel.querySelectorAll('.answer-zone .word-card')).map(card => card.dataset.word).join('|');
+      const correct = panel.dataset.answer;
+      const zone = panel.querySelector('.answer-zone');
+
+      zone.classList.remove('correct', 'incorrect');
+      if (chosen === correct) {
+        zone.classList.add('correct');
+        if (!scoredQuestions.has(currentQuestion)) {
+          scoredQuestions.add(currentQuestion);
+          score++;
+          updateScore();
+        }
+        feedback.textContent = 'Hebat! Kalimatmu benar! 🎉';
+        feedback.className = 'feedback mt-5 text-center text-base font-bold text-emerald-600';
+      } else {
+        zone.classList.add('incorrect');
+        feedback.textContent = 'Belum tepat. Coba susun lagi, ya! 💪';
+        feedback.className = 'feedback mt-5 text-center text-base font-bold text-rose-500';
+      }
+    }
+
+    function resetQuestion() {
+      preparePanel(activePanel());
+      feedback.textContent = '';
+      feedback.className = 'feedback mt-5 text-center text-base font-bold';
+    }
+
+    function nextQuestion() {
+      panels[currentQuestion].classList.remove('active');
+      currentQuestion = (currentQuestion + 1) % panels.length;
+      panels[currentQuestion].classList.add('active');
+      preparePanel(activePanel());
+      updateQuestionNumber();
+      feedback.textContent = '';
+      feedback.className = 'feedback mt-5 text-center text-base font-bold';
+    }
+
+    document.querySelectorAll('.word-card').forEach(card => {
+      card.addEventListener('pointerdown', cardPointerDown);
+      card.addEventListener('pointermove', cardPointerMove);
+      card.addEventListener('pointerup', cardPointerUp);
+      card.addEventListener('pointercancel', cardPointerUp);
+    });
+
+    document.getElementById('check-button').addEventListener('click', checkAnswer);
+    document.getElementById('reset-button').addEventListener('click', resetQuestion);
+    document.getElementById('next-button').addEventListener('click', nextQuestion);
+
+    window.addEventListener('resize', () => {
+      const panel = activePanel();
+      panel.querySelectorAll('.word-card:not(.placed)').forEach(card => randomizeCard(card, panel.querySelector('.word-bank')));
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      preparePanel(activePanel());
+      updateScore();
+      updateQuestionNumber();
+      requestAnimationFrame(animateWords);
+    });
+  </script>
+ </body>
+</html>
